@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Secreto - ElRedondo GALAXIA</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #000033; color: #e0ffff; margin: 0; padding: 30px; }
+        .contenedor { max-width: 800px; margin: 0 auto; background: rgba(0,0,80,0.8); padding: 30px; border-radius: 15px; border: 3px solid #00ffff; }
+        h1 { color: #00ffff; text-align: center; text-shadow: 0 0 10px #00ffff; }
+        label { display: block; margin: 15px 0 5px; font-weight: bold; }
+        input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #00ffff; background: #001122; color: white; }
+        button { background: #ff00ff; color: white; border: none; padding: 12px 25px; font-size: 1.1em; border-radius: 8px; cursor: pointer; margin: 10px; }
+        button:hover { background: #ff69b4; }
+        #lista-noticias { margin-top: 40px; }
+        .noticia-item { background: rgba(255,255,255,0.1); padding: 15px; margin: 10px 0; border-radius: 8px; border-left: 5px solid #ffff00; }
+        .aviso { text-align: center; font-size: 1.2em; color: #ffff00; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+<div class="contenedor">
+    <h1>Panel Secreto - Publicar Noticia Galáctica 🚀</h1>
+    <p class="aviso">¡Solo el staff de 6ºB-6ºA! Las noticias aparecen en <a href="index.html" style="color:#00ffff;">la página principal</a></p>
+
+    <form id="formNoticia">
+        <label>Título épico:</label>
+        <input type="text" id="titulo" required placeholder="Ej: ¡Nueva galaxia bebé encontrada!">
+
+        <label>Fecha (puedes poner la de hoy):</label>
+        <input type="text" id="fecha" required value="Febrero 2026" placeholder="Ej: 02 febrero 2026">
+
+        <label>Texto de la noticia:</label>
+        <textarea id="texto" rows="6" required placeholder="Escribe aquí lo que pasó en el universo..."></textarea>
+
+        <label>Comentario random / rare (opcional):</label>
+        <textarea id="rare" rows="3" placeholder="Algo loco tipo: ¿Y si los aliens ya lo sabían? 🤯"></textarea>
+
+        <button type="submit">¡Publicar en la Galaxia! 🌌</button>
+        <button type="button" id="limpiarTodo">Borrar TODAS las noticias (cuidado!)</button>
+    </form>
+
+    <div id="lista-noticias">
+        <h2>Noticias ya publicadas:</h2>
+        <div id="noticias-list"></div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('formNoticia');
+    const lista = document.getElementById('noticias-list');
+
+    // Cargar y mostrar noticias actuales
+    function mostrarNoticias() {
+        let noticias = JSON.parse(localStorage.getItem('noticiasGalaxia')) || [];
+        lista.innerHTML = '';
+
+        noticias.forEach((noti, index) => {
+            const div = document.createElement('div');
+            div.className = 'noticia-item';
+            div.innerHTML = `
+                <strong>${noti.titulo}</strong> - ${noti.fecha}<br>
+                ${noti.texto.substring(0, 100)}...
+                <br><button onclick="borrarNoticia(${index})">Eliminar esta</button>
+            `;
+            lista.appendChild(div);
+        });
+    }
+
+    // Guardar nueva noticia
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const nueva = {
+            titulo: document.getElementById('titulo').value.trim(),
+            fecha: document.getElementById('fecha').value.trim(),
+            texto: document.getElementById('texto').value.trim(),
+            rare: document.getElementById('rare').value.trim()
+        };
+
+        let noticias = JSON.parse(localStorage.getItem('noticiasGalaxia')) || [];
+        noticias.push(nueva);
+        localStorage.setItem('noticiasGalaxia', JSON.stringify(noticias));
+
+        alert('¡Noticia publicada! Ve a index.html para verla 🌟');
+        form.reset();
+        mostrarNoticias();
+    });
+
+    // Borrar una noticia
+    window.borrarNoticia = function(index) {
+        if (confirm('¿Seguro que quieres borrar esta noticia?')) {
+            let noticias = JSON.parse(localStorage.getItem('noticiasGalaxia')) || [];
+            noticias.splice(index, 1);
+            localStorage.setItem('noticiasGalaxia', JSON.stringify(noticias));
+            mostrarNoticias();
+        }
+    };
+
+    // Borrar todo
+    document.getElementById('limpiarTodo').addEventListener('click', () => {
+        if (confirm('¿BORRAR TODAS LAS NOTICIAS? Esto es IRREVERSIBLE!')) {
+            localStorage.removeItem('noticiasGalaxia');
+            mostrarNoticias();
+            alert('¡Todo borrado! Empieza de cero.');
+        }
+    });
+
+    // Cargar al inicio
+    mostrarNoticias();
+</script>
+
+</body>
+</html>

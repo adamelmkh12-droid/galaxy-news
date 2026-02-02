@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElRedondo GALAXIA 🌌 - Noticias Cósmicas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #000033, #000066, #0a001a);
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            background-image: url('https://science.nasa.gov/wp-content/uploads/2023/09/webb-cosmic-cliffs.png?w=1920');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .contenedor { max-width: 900px; margin: 0 auto; background: rgba(0,0,50,0.7); padding: 30px; border: 5px dashed #ff00ff; border-radius: 20px; }
+        h1, h2 { color: #00ffff; text-shadow: 0 0 10px #00ffff; }
+        .noticia { background: rgba(0,255,255,0.15); border-left: 8px solid #00ffff; padding: 20px; margin: 20px 0; border-radius: 12px; }
+        .rare { color: #ff69b4; font-style: italic; font-size: 1.2em; }
+        .aviso { background: rgba(255,255,0,0.3); border: 4px solid red; padding: 15px; margin: 20px 0; font-weight: bold; }
+        .footer { margin-top: 40px; color: #aaaaff; font-size: 0.9em; }
+        #noticias-container { min-height: 300px; }
+    </style>
+</head>
+<body>
+
+<div class="contenedor">
+    <h1>ElRedondo GALAXIA 🌌</h1>
+    <h2>Preview Access 2026 - Noticias del Universo</h2>
+
+    <div class="aviso">
+        ¡Bienvenid@ a la versión GALAXIA! Solo noticias cósmicas épicas.<br>
+        <a href="admin.html" style="color:#ffff00; font-weight:bold;">→ Panel secreto de publicaciones (solo para el staff)</a>
+    </div>
+
+    <div id="noticias-container"></div>
+
+    <div class="footer">
+        © 2026 Pau Casals 6ºB-6ºA | ElRedondo GALAXIA - Powered by localStorage magic
+    </div>
+</div>
+
+<script>
+    // Cargar noticias desde localStorage
+    function cargarNoticias() {
+        const contenedor = document.getElementById('noticias-container');
+        contenedor.innerHTML = ''; // Limpiar
+
+        let noticias = JSON.parse(localStorage.getItem('noticiasGalaxia')) || [];
+
+        if (noticias.length === 0) {
+            contenedor.innerHTML = '<p style="font-size:1.3em;">Aún no hay noticias galácticas... ¡El staff está trabajando! 🌠</p>';
+            return;
+        }
+
+        noticias.forEach(noti => {
+            const div = document.createElement('div');
+            div.className = 'noticia';
+            div.innerHTML = `
+                <h2>${noti.titulo}</h2>
+                <p><strong>${noti.fecha}</strong></p>
+                <p>${noti.texto}</p>
+                ${noti.rare ? `<p class="rare">${noti.rare}</p>` : ''}
+            `;
+            contenedor.appendChild(div);
+        });
+    }
+
+    // Cargar al abrir la página
+    window.onload = cargarNoticias;
+</script>
+
+</body>
+</html>
